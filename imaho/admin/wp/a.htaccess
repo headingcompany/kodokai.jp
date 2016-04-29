@@ -1,0 +1,29 @@
+#PHP実行
+AddHandler application/x-httpd-phpcgi .php
+#AddType application/x-httpd-php .php .html .htm
+
+##Wordpress設定
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress
+
+
+# 画像・ファイルアップロード
+<files async-upload.php>
+AddHandler application/x-httpd-phpcgi .php
+</files>
+# プラグイン・テーマ 新規インストール／アップグレード
+<Files update.php>
+AddHandler application/x-httpd-phpcgi .php
+</Files>
+# 本体アップグレード
+<Files update-core.php>
+AddHandler application/x-httpd-phpcgi .php
+</Files>

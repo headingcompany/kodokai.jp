@@ -1,0 +1,9 @@
+Options +FollowSymLinks
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^www\.imaho\.net
+RewriteRule (.*) http://imaho.net/$1 [R=301,L]
+RewriteCond %{THE_REQUEST} ^.*/index.html
+RewriteRule ^(.*)index.html$ http://imaho.net/$1 [R=301,L]
+
+#404 対応
+#ErrorDocument 404 /index.html
