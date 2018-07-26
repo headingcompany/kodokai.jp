@@ -162,11 +162,6 @@ label[for="wpt_license_key"] {
     border-top: 1px solid #ccc;
 }
 
-#wpt_settings_page .inside.purchase ul {
-	list-style-type: disc;
-	margin-left: 2em;
-}
-
 #wp-to-twitter  .wpt-pro-tab {
 	background: #213e7f;
 	color: #fff;
@@ -193,28 +188,18 @@ label[for="wpt_license_key"] {
 	padding: 0;
 }
 
-.inside.purchase {
-	width: 70%;
-	margin: 0 auto;
-	min-width: 300px;
-}
-
-.inside.purchase h4 {
-	font-size: 1.8em;
-}
-
 .wpt-terms li {
     padding: 2px !important;
     border-radius: 3px;
 }
 
 .tweet {
-    background: #070 url(../images/Ok.png) 99% 50% no-repeat;
+    background: #070 url(../images/Ok.png) right 50% no-repeat;
     color: #fff;
 }
 
 .notweet {
-    background: #9d1309 url(../images/Error.png) 99% 50% no-repeat;
+    background: #9d1309 url(../images/Error.png) right 50% no-repeat;
     color: #fff;
 }
 
@@ -273,13 +258,6 @@ label[for='wpt_prepend_rt'], label[for='wpt_prepend_rt2'], label[for='wpt_prepen
 	background: #233c7f;
 }
 
-.tweet_length_control {
-	background: #ffd;
-	color:  #000;
-	border: 2px solid #dd1;
-	padding: .5em;
-}
-
 .jcd-narrow .free .postbox, .jcd-narrow .free .postbox a, .jcd-narrow .free .postbox h3 {
 	background: #233c7f;
 	color: #fff;
@@ -287,6 +265,7 @@ label[for='wpt_prepend_rt'], label[for='wpt_prepend_rt2'], label[for='wpt_prepen
 
 .jcd-narrow .free .postbox .cta a {
 	font-size: 1.4em;
+	padding: .5em;
 }
 
 .jcd-narrow .postbox a:hover, .jcd-narrow .postbox a:focus {

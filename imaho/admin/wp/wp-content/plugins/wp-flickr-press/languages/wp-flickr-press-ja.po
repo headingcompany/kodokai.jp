@@ -354,21 +354,3 @@ msgstr "作成したFlickrアプリのコールバックURLにコピーして使
 
 msgid "Embed Options"
 msgstr "埋め込みオプション"
-
-msgid "This UI is old version. Currently have new search UI please try new version.<br>You can use new UI from Add Media."
-msgstr "この検索UIはメンテナンスされていません。現在、新しい検索UIが「メディアを挿入」から利用可能なのでそちらをご利用ください。"
-
-msgid "Multiple Mode"
-msgstr "複数選択"
-
-msgid "DEBUG"
-msgstr "デバッグ情報"
-
-msgid "Please paste below information when create issue."
-msgstr "バグ報告をする時に下記の情報をコピー&ペーストして一緒に載せてもらえると調査が早くなります。"
-
-msgid "Copied!"
-msgstr "クリップボードにコピーしました。"
-
-msgid "This browser not support copy command. Please paste manually."
-msgstr "このブラウザでは対応していません。手動でコピーしてください。"

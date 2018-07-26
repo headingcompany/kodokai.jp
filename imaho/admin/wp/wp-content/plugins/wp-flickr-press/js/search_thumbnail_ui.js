@@ -11,7 +11,7 @@
         var pager_search = null;
         var OPTIONS = {
             perpage : 20,
-            extras : flickr.SIZE_VALUES.join(',') + ",path_alias,description",
+            extras : flickr.SIZE_VALUES.join(',') + ",path_alias",
             sort : "date-posted-desc",
             thumbnail_size : "sq"
         };
@@ -330,9 +330,8 @@
         // ===================================
         function draw_inline_content(photo, photos) {
 //            console.log("draw_inline_content");
-            console.log(photo);
+//            console.log(photo);
             $("#inline-title").val( photo.title );
-            $("#inline-description").val( photo.description._content );
             $("#inline-url").val( getDefaultLinkValue(photo, photos) );
             $("#inline-url-file").val( flickr.getPhotoUrl(photo, $('#inline-default_file_url_size').val()) );
             $("#inline-url-page").val( flickr.getPhotoPageUrl(photo, photos) );
@@ -403,19 +402,16 @@
 
         function generate_html(html) {
             if (html.indexOf('[img]') >= 0) {
-                html = html.replace(/\[img\]/g, generate_html_img());
+                html = html.replace('[img]', generate_html_img());
             }
             if (html.indexOf('[title]') >= 0) {
-                html = html.replace(/\[title\]/g, generate_html_title());
-            }
-            if (html.indexOf('[description]') >= 0) {
-                html = html.replace(/\[description\]/g, generate_html_description());
+                html = html.replace('[title]', generate_html_title());
             }
             if (html.indexOf('[url]') >= 0) {
-                html = html.replace(/\[url\]/g, generate_html_url());
+                html = html.replace('[url]', generate_html_url());
             }
             if (html.indexOf('[null]') >= 0) {
-                html = html.replace(/\[null\]/g, '');
+                html = html.replace('[null]', '');
             }
 
             return html;
@@ -459,9 +455,6 @@
         }
         function generate_html_title() {
             return $("#inline-title").val();
-        }
-        function generate_html_description() {
-            return $("#inline-description").val();
         }
         function generate_html_url() {
             return $("#inline-url").val();

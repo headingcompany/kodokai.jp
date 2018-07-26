@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Multibyte Patch
 Description: Multibyte functionality enhancement for the WordPress Japanese package.
-Version: 2.8.1
+Version: 2.5
 Plugin URI: http://eastcoder.com/code/wp-multibyte-patch/
 Author: Seisuke Kuraishi
 Author URI: http://tinybit.co.jp/
@@ -15,9 +15,9 @@ Domain Path: /languages
  * Multibyte functionality enhancement for the WordPress Japanese package.
  *
  * @package WP_Multibyte_Patch
- * @version 2.8.1
+ * @version 2.5
  * @author Seisuke Kuraishi <210pura@gmail.com>
- * @copyright Copyright (c) 2016 Seisuke Kuraishi, Tinybit Inc.
+ * @copyright Copyright (c) 2015 Seisuke Kuraishi, Tinybit Inc.
  * @license http://opensource.org/licenses/gpl-2.0.php GPLv2
  * @link http://eastcoder.com/code/wp-multibyte-patch/
  */
@@ -28,7 +28,7 @@ Domain Path: /languages
 class multibyte_patch {
 
 	// Do not edit this section. Use wpmp-config.php instead.
-	public $conf = array(
+	var $conf = array(
 		'excerpt_mblength' => 110,
 		'excerpt_more' => ' [&hellip;]',
 		'comment_excerpt_mblength' => 40,
@@ -49,27 +49,24 @@ class multibyte_patch {
 		'patch_force_twentyfourteen_google_fonts_off' => false,
 		'patch_force_twentyfifteen_google_fonts_off' => false,
 		'patch_force_twentysixteen_google_fonts_off' => false,
-		'patch_force_twentyseventeen_google_fonts_off' => false,
 		'patch_sanitize_file_name' => true,
-		'patch_sanitize_feed_xml_text' => false,
 		'patch_bp_create_excerpt' => false,
 		'bp_excerpt_mblength' => 110,
 		'bp_excerpt_more' => ' [&hellip;]'
 	);
 
-	protected $blog_encoding = 'UTF-8';
-	protected $has_mbfunctions = false;
-	protected $mbfunctions_required = false;
-	protected $has_mb_strlen = false;
-	protected $debug_suffix = '';
-	protected $textdomain = 'wp-multibyte-patch';
-	protected $lang_dir = 'languages';
-	protected $required_version = '4.5';
-	protected $query_based_vars = array();
-	protected $has_pcre_utf8 = false;
+	var $blog_encoding = 'UTF-8';
+	var $has_mbfunctions = false;
+	var $mbfunctions_required = false;
+	var $has_mb_strlen = false;
+	var $debug_suffix = '';
+	var $textdomain = 'wp-multibyte-patch';
+	var $lang_dir = 'languages';
+	var $required_version = '4.3-RC3';
+	var $query_based_vars = array();
 
 	// For fallback purpose only. (1.6)
-	public function guess_encoding( $string, $encoding = '' ) {
+	function guess_encoding( $string, $encoding = '' ) {
 		$blog_encoding = $this->blog_encoding;
 
 		if ( !$encoding && seems_utf8( $string ) )
@@ -81,7 +78,7 @@ class multibyte_patch {
 	}
 
 	// For fallback purpose only. (1.6)
-	public function convenc( $string, $to_encoding, $from_encoding = '' ) {
+	function convenc( $string, $to_encoding, $from_encoding = '' ) {
 		$blog_encoding = $this->blog_encoding;
 
 		if ( '' == $from_encoding )
@@ -93,7 +90,7 @@ class multibyte_patch {
 			return mb_convert_encoding( $string, $to_encoding, $from_encoding );
 	}
 
-	public function incoming_trackback( $commentdata ) {
+	function incoming_trackback( $commentdata ) {
 		if ( 'trackback' != $commentdata['comment_type'] )
 			return $commentdata;
 
@@ -129,13 +126,13 @@ class multibyte_patch {
 		return $commentdata;
 	}
 
-	public function pre_remote_source( $remote_source, $pagelinkedto ) {
-		$this->pingback_ping_remote_source = $remote_source;
+	function pre_remote_source( $linea, $pagelinkedto ) {
+		$this->pingback_ping_linea = $linea;
 		$this->pingback_ping_pagelinkedto = $pagelinkedto;
-		return $remote_source;
+		return $linea;
 	}
 
-	public function incoming_pingback( $commentdata ) {
+	function incoming_pingback( $commentdata ) {
 		if ( 'pingback' != $commentdata['comment_type'] )
 			return $commentdata;
 
@@ -143,23 +140,23 @@ class multibyte_patch {
 			return $commentdata;
 
 		$pagelinkedto = $this->pingback_ping_pagelinkedto;
-		$remote_source = $this->pingback_ping_remote_source;
+		$linea = $this->pingback_ping_linea;
 
-		$remote_source = preg_replace( "/" . preg_quote( '<!DOC', '/' ) . "/i", '<DOC', $remote_source );
-		$remote_source = preg_replace( "/[\r\n\t ]+/", ' ', $remote_source );
-		$remote_source = preg_replace( "/<\/*(h1|h2|h3|h4|h5|h6|p|th|td|li|dt|dd|pre|caption|input|textarea|button|body)[^>]*>/i", "\n\n", $remote_source );
+		$linea = preg_replace( "/" . preg_quote( '<!DOC', '/' ) . "/i", '<DOC', $linea );
+		$linea = preg_replace( "/[\r\n\t ]+/", ' ', $linea );
+		$linea = preg_replace( "/<\/*(h1|h2|h3|h4|h5|h6|p|th|td|li|dt|dd|pre|caption|input|textarea|button|body)[^>]*>/i", "\n\n", $linea );
 
-		preg_match( '|<title>([^<]*?)</title>|is', $remote_source, $matchtitle );
-		$title = isset( $matchtitle[1] ) ? $matchtitle[1] : '';
+		preg_match( '|<title>([^<]*?)</title>|is', $linea, $matchtitle );
+		$title = $matchtitle[1];
 
-		preg_match( "/<meta[^<>]+charset=\"*([a-zA-Z0-9\-_]+)\"*[^<>]*>/i", $remote_source, $matches );
+		preg_match( "/<meta[^<>]+charset=\"*([a-zA-Z0-9\-_]+)\"*[^<>]*>/i", $linea, $matches );
 		$charset = isset( $matches[1] ) ? $matches[1] : '';
-		$from_encoding = $this->guess_encoding( strip_tags( $remote_source ), $charset );
+		$from_encoding = $this->guess_encoding( strip_tags( $linea ), $charset );
 		$blog_encoding = $this->blog_encoding;
 
-		$remote_source = strip_tags( $remote_source, '<a>' );
-		$remote_source = $this->convenc( $remote_source, $blog_encoding, $from_encoding );
-		$p = explode( "\n\n", $remote_source );
+		$linea = strip_tags( $linea, '<a>' );
+		$linea = $this->convenc( $linea, $blog_encoding, $from_encoding );
+		$p = explode( "\n\n", $linea );
 
 		foreach ( $p as $para ) {
 			if ( strpos( $para, $pagelinkedto ) !== false && preg_match( "/^([^<>]*)(\<a[^<>]+[\"']" . preg_quote( $pagelinkedto, '/' ) . "[\"'][^<>]*\>)([^<>]+)(\<\/a\>)(.*)$/i", $para, $context ) )
@@ -208,7 +205,7 @@ class multibyte_patch {
 		return $commentdata;
 	}
 
-	public function preprocess_comment( $commentdata ) {
+	function preprocess_comment( $commentdata ) {
 		if ( $commentdata['comment_type'] == 'trackback' )
 			return $this->incoming_trackback( $commentdata );
 		elseif ( $commentdata['comment_type'] == 'pingback' )
@@ -217,7 +214,7 @@ class multibyte_patch {
 			return $commentdata;
 	}
 
-	public function trim_multibyte_excerpt( $text = '', $length = 110, $more = ' [&hellip;]', $encoding = 'UTF-8' ) {
+	function trim_multibyte_excerpt( $text = '', $length = 110, $more = ' [&hellip;]', $encoding = 'UTF-8' ) {
 		$text = strip_shortcodes( $text );
 		$text = str_replace( ']]>', ']]&gt;', $text );
 		$text = strip_tags( $text );
@@ -229,15 +226,15 @@ class multibyte_patch {
 		return $text;
 	}
 
-	public function bp_create_excerpt( $text = '' ) {
+	function bp_create_excerpt( $text = '' ) {
 		return $this->trim_multibyte_excerpt( $text, $this->conf['bp_excerpt_mblength'], $this->conf['bp_excerpt_more'], $this->blog_encoding );
 	}
 
-	public function bp_get_activity_content_body( $content = '' ) {
+	function bp_get_activity_content_body( $content = '' ) {
 		return preg_replace( "/<a [^<>]+>([^<>]+)<\/a>(" . preg_quote( $this->conf['bp_excerpt_more'], '/' ) . "<\/p>)$/", "$1$2", $content );
 	}
 
-	public function get_comment_excerpt( $excerpt = '', $comment_ID = 0, $comment = '' ) {
+	function get_comment_excerpt( $excerpt = '', $comment_ID = 0, $comment = '' ) {
 		$blog_encoding = $this->blog_encoding;
 		$excerpt = strip_tags( str_replace( array( "\n", "\r" ), ' ', $comment->comment_content ) );
 
@@ -247,7 +244,7 @@ class multibyte_patch {
 		return $excerpt;
 	}
 
-	public function excerpt_mblength() {
+	function excerpt_mblength() {
 		if ( isset( $this->query_based_vars['excerpt_mblength'] ) && (int) $this->query_based_vars['excerpt_mblength'] )
 			$length = (int) $this->query_based_vars['excerpt_mblength'];
 		else
@@ -256,14 +253,14 @@ class multibyte_patch {
 		return apply_filters( 'excerpt_mblength', $length );
 	}
 
-	public function excerpt_more() {
+	function excerpt_more() {
 		if ( isset( $this->query_based_vars['excerpt_more'] ) )
 			return $this->query_based_vars['excerpt_more'];
 		else
 			return $this->conf['excerpt_more'];
 	}
 
-	public function sanitize_file_name( $name ) {
+	function sanitize_file_name( $name ) {
 		$info = pathinfo( $name );
 		$ext = !empty( $info['extension'] ) ? '.' . $info['extension'] : '';
 		$name = str_replace( $ext, '', $name );
@@ -272,20 +269,16 @@ class multibyte_patch {
 		return $name;
 	}
 
-	public function wplink_js( &$scripts ) {
-		global $pagenow;
+	function wplink_js( &$scripts ) {
+		$script_required_version = '4.4-RC1';
 
-		$file = dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . "/wp-includes/js/wplink{$this->debug_suffix}.js";
-
-		if( ! is_admin() || ! isset( $pagenow ) || ! in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) || ! is_file( $file ) )
-			return;
-
-		$debug_qs = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '?sd=1' : '';
-
-		$scripts->add( 'wplink', plugin_dir_url( __FILE__ ) . "wplink.php{$debug_qs}", array( 'jquery', 'wp-a11y' ), false, 1 );
+		if ( !$this->is_wp_required_version( $script_required_version ) )
+			$scripts->add( 'wplink', plugin_dir_url( __FILE__ ) . "js/20150818/wplink{$this->debug_suffix}.js", array( 'jquery' ), '20150818', 1 );
+		else
+			$scripts->add( 'wplink', plugin_dir_url( __FILE__ ) . "js/wplink{$this->debug_suffix}.js", array( 'jquery' ), '20151207', 1 );
 	}
 
-	public function force_character_count( $translations = '', $text = '', $context = '' ) {
+	function force_character_count( $translations = '', $text = '', $context = '' ) {
 		if ( 'word count: words or characters?' == $context && 'words' == $text )
 			return 'characters';
 
@@ -295,31 +288,27 @@ class multibyte_patch {
 		return $translations;
 	}
 
-	public function force_twentytwelve_open_sans_off() {
+	function force_twentytwelve_open_sans_off() {
 		wp_dequeue_style( 'twentytwelve-fonts' );
 	}
 
-	public function force_twentythirteen_google_fonts_off() {
+	function force_twentythirteen_google_fonts_off() {
 		wp_dequeue_style( 'twentythirteen-fonts' );
 	}
 
-	public function force_twentyfourteen_google_fonts_off() {
+	function force_twentyfourteen_google_fonts_off() {
 		wp_dequeue_style( 'twentyfourteen-lato' );
 	}
 
-	public function force_twentyfifteen_google_fonts_off() {
+	function force_twentyfifteen_google_fonts_off() {
 		wp_dequeue_style( 'twentyfifteen-fonts' );
 	}
 
-	public function force_twentysixteen_google_fonts_off() {
+	function force_twentysixteen_google_fonts_off() {
 		wp_dequeue_style( 'twentysixteen-fonts' );
 	}
 
-	public function force_twentyseventeen_google_fonts_off() {
-		wp_dequeue_style( 'twentyseventeen-fonts' );
-	}
-
-	public function remove_editor_style( $file = '' ) {
+	function remove_editor_style( $file = '' ) {
 		global $editor_styles;
 
 		if ( ! is_admin() || empty( $editor_styles ) || ! is_array( $editor_styles ) )
@@ -331,19 +320,7 @@ class multibyte_patch {
 		}
 	}
 
-	public function sanitize_xml_text( $text, $replace = '' ) {
-		if ( 'UTF-8' !== $this->blog_encoding || ! $this->has_pcre_utf8 )
-			return $text;
-
-		if ( $this->has_mbfunctions )
-			$text = @mb_convert_encoding( $text, 'UTF-8', 'UTF-8' );
-		elseif ( function_exists( 'iconv' ) )
-			$text = @iconv( 'UTF-8', 'UTF-8', $text );
-
-		return @preg_replace( '/[^\x9\xA\xD\x20-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]+/u', $replace, $text );
-	}
-
-	public function query_based_settings() {
+	function query_based_settings() {
 		$is_query_funcs = array( 'is_feed', 'is_404', 'is_search', 'is_tax', 'is_front_page', 'is_home', 'is_attachment', 'is_single', 'is_page', 'is_category', 'is_tag', 'is_author', 'is_date', 'is_archive', 'is_paged' );
 
 		foreach ( $is_query_funcs as $func ) {
@@ -356,31 +333,19 @@ class multibyte_patch {
 	}
 
 	// The fallback only works with UTF-8 blog.
-	public function mb_strlen( $str = '', $encoding = 'UTF-8' ) {
+	function mb_strlen( $str = '', $encoding = 'UTF-8' ) {
 		if ( $this->has_mb_strlen )
 			return mb_strlen( $str, $encoding );
 		else
 			return preg_match_all( "/./us", $str, $match );
 	}
 
-	public function is_wp_required_version( $required_version ) {
+	function is_wp_required_version( $required_version ) {
 		global $wp_version;
 		return version_compare( $wp_version, $required_version, '<' ) ? false : true;
 	}
 
-	public function filters_after_template_redirect() {
-		if ( is_feed() ) {
-			if ( false !== $this->conf['patch_sanitize_feed_xml_text'] ) {
-				add_filter( 'the_title_rss', array( $this, 'sanitize_xml_text' ), 99 );
-				add_filter( 'the_content_feed', array( $this, 'sanitize_xml_text' ), 99 );
-				add_filter( 'the_excerpt_rss', array( $this, 'sanitize_xml_text' ), 99 );
-				add_filter( 'comment_text_rss', array( $this, 'sanitize_xml_text' ), 99 );
-				add_filter( 'comment_text', array( $this, 'sanitize_xml_text' ), 99 );
-			}
-		}
-	}
-
-	public function filters_after_setup_theme() {
+	function filters_after_setup_theme() {
 		// add filter
 		if ( false !== $this->conf['patch_force_character_count']) {
 			if ( 'characters_including_spaces' != _x( 'words', 'Word count type. Do not translate!' ) )
@@ -415,16 +380,9 @@ class multibyte_patch {
 			if ( function_exists( 'twentysixteen_fonts_url' ) )
 				$this->remove_editor_style( twentysixteen_fonts_url() );
 		}
-
-		if ( false !== $this->conf['patch_force_twentyseventeen_google_fonts_off'] && 'twentyseventeen' == get_template() ) {
-			add_action( 'wp_enqueue_scripts', array( $this, 'force_twentyseventeen_google_fonts_off' ), 99 );
-
-			if ( function_exists( 'twentyseventeen_fonts_url' ) )
-				$this->remove_editor_style( twentyseventeen_fonts_url() );
-		}
 	}
 
-	public function filters() {
+	function filters() {
 		// add filter
 		add_filter( 'preprocess_comment', array( $this, 'preprocess_comment' ), 99 );
 
@@ -468,10 +426,9 @@ class multibyte_patch {
 			add_action( 'wp_default_scripts', array( $this, 'wplink_js' ), 9 );
 
 		add_action( 'after_setup_theme', array( $this, 'filters_after_setup_theme' ), 99 );
-		add_action( 'template_redirect', array( $this, 'filters_after_template_redirect' ) );
 	}
 
-	public function mbfunctions_exist() {
+	function mbfunctions_exist() {
 		return (
 			function_exists( 'mb_convert_encoding' ) &&
 			function_exists( 'mb_convert_kana' ) &&
@@ -481,7 +438,7 @@ class multibyte_patch {
 		) ? true : false;
 	}
 
-	public function activation_check() {
+	function activation_check() {
 		$required_version = $this->required_version;
 
 		if ( !$this->is_wp_required_version( $required_version ) ) {
@@ -494,7 +451,7 @@ class multibyte_patch {
 		}
 	}
 
-	public function load_conf() {
+	function load_conf() {
 		$wpmp_conf = array();
 
 		if ( file_exists( WP_CONTENT_DIR . '/wpmp-config.php' ) )
@@ -509,20 +466,18 @@ class multibyte_patch {
 		$this->conf = array_merge( $this->conf, $wpmp_conf );
 	}
 
-	public function __construct() {
+	function __construct() {
 		$this->load_conf();
 		$this->blog_encoding = get_option( 'blog_charset' );
-
-		if ( preg_match( '/^utf-?8$/i', $this->blog_encoding ) || empty( $this->blog_encoding ) )
+		if ( empty( $this->blog_encoding ) )
 			$this->blog_encoding = 'UTF-8';
 
 		// mbstring functions are required for non UTF-8 blog.
-		if ( 'UTF-8' !== $this->blog_encoding )
+		if ( !preg_match( "/^utf-?8$/i", $this->blog_encoding ) )
 			$this->mbfunctions_required = true;
 
 		$this->has_mbfunctions = $this->mbfunctions_exist();
 		$this->has_mb_strlen = function_exists( 'mb_strlen' );
-		$this->has_pcre_utf8 = @preg_match( '/^.$/u', "\xC2\xA9" );
 		$this->debug_suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		load_plugin_textdomain( $this->textdomain, false, dirname( plugin_basename( __FILE__ ) ) . '/' . $this->lang_dir );

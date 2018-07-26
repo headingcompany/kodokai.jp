@@ -3,8 +3,8 @@ Contributors: tatsuya, alexanderovsov
 Donate link: http://fukata.org/
 Tags: images,flickr
 Requires at least: 3.8
-Tested up to: 4.9
-Stable tag: 2.6.4
+Tested up to: 4.4
+Stable tag: 2.2.0
 
 Flickr integration for wordpress plugin.
 
@@ -36,7 +36,7 @@ https://github.com/fukata/wp-flickr-press/issues
 == Installation ==
 
 1. Download the plugin, unpack it and upload the 'wp-flickr-press' folder to your wp-content/plugins directory.
-2. To grant write access to wp-content/plugins/wp-flickr-press/cache.
+2. To grant write access to wp-content/plugins/wp-flickr-press/cache. 
 3. Activate the plugin through the 'Plugins' menu in WordPress.
 4. [Create Your Flickr App](http://www.flickr.com/services/apps/create/apply/ "Create Your Flickr App") and settings OAuth Callback URL. Default OAuth Callback URL is `http://"Your Blog Domain"/wp-admin/admin.php?action=wpfp_flickr_oauth_callback
 5. Go to [Settings] -> [FlickrPress] to configure the options.
@@ -55,98 +55,6 @@ None
 6. New UI 2
 
 == Changelog ==
-
-= 2.6.4 =
-* Fix: Fix parse img tag.
-
-= 2.6.3 =
-* Feature: Change flikcr web endpoint http to https. Overwrite by NSID if not set path alias.
-
-= 2.6.2 =
-* Feature: Add Debug Mode.
-
-= 2.6.1 =
-* Feature: Add Sub Options of img tag. display `width` and `height` properties.
-
-= 2.6.0 =
-* Feature: Show debug information on settings page.
-
-= 2.5.6 =
-* Fix: PHPFlickr-Oauth(dependency library) fix https when use socket.
-
-= 2.5.5 =
-* Fix: Don't start session on frontend(fixed phpFlickr library).
-
-= 2.5.4 =
-* Feature: Add open wp-flickr-press media library shortcut button.
-
-= 2.5.3 =
-* Fix: fixed bug of PHPFlickr-OAuth library.
-
-= 2.5.2 =
-* Feature: Multiple insert mode on mobile.
-
-= 2.5.1 =
-* Fix: Show selection-info.
-
-= 2.5.0 =
-* Feature: Support mobile devic but only insert single image.
-
-= 2.4.8 =
-* Fix: Support WordPress v4.9.
-
-= 2.4.7 =
-* Fix: [url] tag to new UI.
-
-= 2.4.6 =
-* Fix: Support [description] tag to old UI.
-* Add: Notice old UI.
-
-= 2.4.5 =
-* Fix: Use with WooCommerce.
-
-= 2.4.4 =
-* Fix: Use with WooCommerce.
-
-= 2.4.3 =
-* Change: change thumbnail size `sq` to `q`
-
-= 2.4.2 =
-* Fix: custom post type. https://github.com/fukata/wp-flickr-press/pull/35
-
-= 2.4.1 =
-* Fix: Fix flickr oauth signed api.
-
-= 2.4.0 =
-* Fix: Fix flickr oauth.
-* Please get oauth token again can't use before got token.
-
-= 2.3.8 =
-* Fix: Update select2 to full version.
-
-= 2.3.7 =
-* Fix: Check extract thumbnail or not when call `the_post_thumbnail` function.
-
-= 2.3.6 =
-* Modified: Replace title to album title when search by photoset and slideshow on.
-
-= 2.3.5 =
-* Feature: Support embed slideshow in album.
-
-= 2.3.4 =
-* Fix: Reset album select field.
-
-= 2.3.3 =
-* Feature: Add search field for album select.
-
-= 2.3.2 =
-* Fix: Plugin, Author URL.
-
-= 2.3.1 =
-* Bugfix: Doesn't work on firefox.
-
-= 2.3.0 =
-* Feature: Add template variable `description`.
 
 = 2.2.0 =
 * Feature: Add Embed Option(Header, Footer, Slideshow).
@@ -207,17 +115,17 @@ None
 * Bugfix form url search type list.
 
 = 1.9.3 =
-* Add description for Flickr App CallbackURL.
+* Add description for Flickr App CallbackURL. 
 
 = 1.9.2 =
-* Fixed bug doesn't work activation single site.
+* Fixed bug doesn't work activation single site. 
 
 = 1.9.1 =
 * Fixed readme.txt
 * Add message languages file.
 
 = 1.9.0 =
-* Fixed plugins in symlinked directories.
+* Fixed plugins in symlinked directories.  
 
 = 1.8.0 =
 * Fixed bug Use larger than selected size when selected photo size doesn't exists.

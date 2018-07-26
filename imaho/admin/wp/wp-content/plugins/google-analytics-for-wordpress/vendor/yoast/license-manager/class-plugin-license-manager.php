@@ -1,15 +1,15 @@
 <?php
 
-if ( class_exists( 'MI_License_Manager' ) && ! class_exists( "MI_Plugin_License_Manager", false ) ) {
+if ( class_exists( 'Yoast_License_Manager' ) && ! class_exists( "Yoast_Plugin_License_Manager", false ) ) {
 
-	class MI_Plugin_License_Manager extends MI_License_Manager {
+	class Yoast_Plugin_License_Manager extends Yoast_License_Manager {
 
 		/**
 		 * Constructor
 		 *
-		 * @param MI_Product $product
+		 * @param Yoast_Product $product
 		 */
-		public function __construct( MI_Product $product ) {
+		public function __construct( Yoast_Product $product ) {
 
 			parent::__construct( $product );
 
@@ -20,7 +20,7 @@ if ( class_exists( 'MI_License_Manager' ) && ! class_exists( "MI_Plugin_License_
 					require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 				}
 
-				$this->is_network_activated = is_plugin_active_for_network( $product->get_file() );
+				$this->is_network_activated = is_plugin_active_for_network( $product->get_slug() );
 			}
 		}
 
@@ -32,7 +32,7 @@ if ( class_exists( 'MI_License_Manager' ) && ! class_exists( "MI_Plugin_License_
 				// setup auto updater
 				require_once( dirname( __FILE__ ) . '/class-update-manager.php' );
 				require_once( dirname( __FILE__ ) . '/class-plugin-update-manager.php' );
-				new MI_Plugin_Update_Manager( $this->product, $this );
+				new Yoast_Plugin_Update_Manager( $this->product, $this );
 			}
 		}
 
@@ -42,7 +42,7 @@ if ( class_exists( 'MI_License_Manager' ) && ! class_exists( "MI_Plugin_License_
 		public function specific_hooks() {
 
 			// deactivate the license remotely on plugin deactivation
-			register_deactivation_hook( $this->product->get_file(), array( $this, 'deactivate_license' ) );
+			register_deactivation_hook( $this->product->get_slug(), array( $this, 'deactivate_license' ) );
 		}
 
         /**
@@ -86,5 +86,5 @@ if ( class_exists( 'MI_License_Manager' ) && ! class_exists( "MI_Plugin_License_
 	        }
         }
 	}
-
 }
+

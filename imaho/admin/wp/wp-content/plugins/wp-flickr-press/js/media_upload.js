@@ -1,10 +1,6 @@
-function fp_send_to_editor(h, close, editor) {
+function fp_send_to_editor(h, close) {
 	close = close || false;
     var ed;
-
-    if (editor) {
-        window.wpActiveEditor = editor;
-    }
 
     if ( typeof tinyMCE != 'undefined' && ( ed = tinyMCE.activeEditor ) && !ed.isHidden() ) {
         ed.focus();
@@ -26,7 +22,6 @@ function fp_send_to_editor(h, close, editor) {
 
     } else if ( typeof edInsertContent == 'function' ) {
         edInsertContent(edCanvas, h);
-        jQuery('#' + window.wpActiveEditor).trigger("keyup");
     } else {
         jQuery( edCanvas ).val( jQuery( edCanvas ).val() + h );
     }
