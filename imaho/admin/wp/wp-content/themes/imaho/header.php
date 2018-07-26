@@ -93,6 +93,7 @@ $(document).ready(function(){
 				<li><a href="../blog/" target="_self" class="on"><img src="../src/img/tabMenuHead-6.png" alt="園長ブログ" width="54" height="18" border="0"></a></li>
 				<li><a href="../otoiawase.html" target="_self"><img src="../src/img/tabMenuHead-4.png" alt="お問合せ" width="73" height="18" border="0"></a></li>
 				<li><a href="../recruit.html" target="_self"><img src="../src/img/tabMenuHead-10.png" alt="採用情報" width="75" height="18" border="0"></a></li>
+				<li><a href="../reservation.html" target="_self"><img src="../src/img/tabMenuHead-11.png" alt="見学予約" width="75" height="18" border="0"></a></li>
 			</ul>
 		</div>
 	</div>
